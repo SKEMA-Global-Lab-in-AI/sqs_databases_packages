@@ -5,14 +5,14 @@ sqs_quantmod_data <- function(stock, dateDebut, dateFin) {
 }
 
 #AAPL ne fonctionne pas, réviser le résultat des functions de l'API
-sqs_quantmod_data("AAPL", "2016-05-02", "2017-10-02")
+APPLE <- sqs_quantmod_data("AAPL", "2016-05-02", "2017-10-02")
 head(AAPL)
 
-sqs_quantmod_graph <- function(stock, dateDebut, dateFin) {
-  getSymbols(stock, src="yahoo", from= dateDebut, to= dateFin)
-  return(barChart(stock))
+sqs_quantmod_graph <- function(stockData) {
+  return(barChart(stockData))
 }
 
-sqs_quantmod_graph("AAPL", "2016-05-02", "2017-10-02") 
+
+sqs_quantmod_graph(AAPL)
 
 
