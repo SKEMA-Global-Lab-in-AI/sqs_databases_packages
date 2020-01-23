@@ -50,8 +50,6 @@ fredr_set_key("abcdefghijklmnopqrstuvwxyz123456")
 library(fredr)
 fredr_set_key("01317e24bbe4b76781ff4ffee4c5a8b9")
 #fredr_set_key("01317e24bbe4b76781ff4ffee4c5a8b9")
-# Using search function
-fredr_series_search_text(search_text = "exchange rate")
 ```
 Now, with your API key and using the fredR library, you can access data sources!
 
