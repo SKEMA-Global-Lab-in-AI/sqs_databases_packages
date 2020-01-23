@@ -1,0 +1,150 @@
+---
+title: "API : UNIDO"
+
+description: Access online data through the UNIDO API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Database description 
+The United Nations Industrial Development Organization (UNIDO) provides a variety of databases on business structure and statistics on indicators of industrial performance by country. 
+
+United Nations Industrial Development Organization (UNIDO) data :  https://stat.unido.org/rest/apidoc 
+
+
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+library(httr)
+library(jsonlite)
+
+url <- "https://stat.unido.org/rest/dblist"
+
+get_stuff <- GET(url)
+
+get_stuff
+
+get_stuff_text <- content(get_stuff, "text")
+
+get_stuff_text
+```
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+
+
+get_stuff_json <- fromJSON(get_stuff_text, flatten = TRUE)
+
+get_stuff_df <- as.data.frame(get_stuff_json)
+
+View(get_stuff_df)
+
+
+```
+
+In order to load the database, you need to add the database name to the URL. The spaces in the name need to be replace by "%20".
+
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+
+
+url <- "https://stat.unido.org/rest/dbinfo/CIP%202019"
+
+get_stuff <- GET(url)
+
+get_stuff
+
+get_stuff_text <- content(get_stuff, "text")
+
+get_stuff_json <- fromJSON(get_stuff_text, flatten = TRUE)
+
+get_stuff_json
+
+#get_stuff_df <- as.data.frame(get_stuff_json)
+
+#View(get_stuff_df)
+
+```
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+
+
+db=CIP 2019&cc=124&variable=02&start=2008&end=2009
+
+```
+
+
+
+Now, with your API key and using the fredR library, you can access data sources.
+
+## Functions 
+
+The functions listed below allow you to search and download specific data from the fredR database using a key and different parameters. Each of these functions are detailed below and some examples are provided. 
+
+* **fredr_search()**
+* **fredr_observations()**
+
+### fredr_search()
+
+By using the search function fredr_search(), you will have all indicators related to a specific query. The function fredr_search() takes as an input an indicator from the fredR database and returns a table containing information related to the input inserted. 
+
+For example, it could be interesting to evaluate the exchange rate. 
+
+```{r, message=FALSE, warning=FALSE}
+
+# Using search function 
+fredr_series_search_text(search_text = "exchange rate") 
+```
+
+### fredr_observations()
+
+By using the observation function fredr_observations(), you can add parameters in order to evaluate data concerning an input. 
+
+For example, it could be interesting to evaluate the exchange rate (input) between Euro and $US from 2000 to 2017 (“EXUSEU” in the previous results table).
+
+```{r, message=FALSE, warning=FALSE}
+
+# Downloading data concerning exchange rate
+dataFred <- fredr_series_observations(series_id = "EXUSEU", 
+             observation_start = as.Date("2000-01-01"),
+             observation_end = as.Date("2017-01-01"))
+```
+
+## tl;dr
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+# Register API key
+library(fredr)
+fredr_set_key("abcdefghijklmnopqrstuvwxyz123456")
+
+# Using search function 
+fredr_series_search_text(search_text = "exchange rate")
+
+# Downloading data concerning exchange rate
+dataFred <- fredr_series_observations(series_id = "EXUSEU", 
+             observation_start = as.Date("2000-01-01"),
+             observation_end = as.Date("2017-01-01"))
+
+```
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| fredr_set_key() | Set the key to allow access to the data |
+| fredr_search() | Find data related to an input given |
+| fredr_observations() | Find data related to parameters |
+
+## References
+
+This course uses the [fredR package documentation](https://cran.r-project.org/web/packages/fredr/vignettes/fredr.html#retrieve-series-observations) 

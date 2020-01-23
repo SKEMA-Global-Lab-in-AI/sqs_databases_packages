@@ -1,0 +1,151 @@
+---
+title: "API : quantmod"
+
+description: Access financial data online through the quantmod API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Database description 
+
+Quantmod is an R package designed to access financial data. It is a useful package to make quantitative analysis on the financial market. The environnement offers tools to explore different trading models and create some.
+
+Quantmod: https://github.com/joshuaulrich/quantmod
+
+
+
+## Functions 
+
+Several functions are embedded in this library to obtain financial data, for example:
+
+
+* **getSymbols()**: stock data
+* **barChart()**: data visualisation 
+* **getDividends()**: stock dividend data
+
+<!--
+* **getFX()**: exchange rate
+* **getMetals()**: metal data
+-->
+
+Each of these functions are detailed in this course and some examples are provided. 
+
+### getSymbols()
+
+The function getSymbols() takes as an input the ticker of the stock researched. It then requires the user to specify the timeframe of the data. It will then provide data regarding the price of the stock. 
+
+For example, we would like to download stock data regarding “Apple Inc.” (ticker: AAPL) from May, 2nd of 2016 until October, 2nd of 2016. All data will be stored in a variable named “AAPL”.
+
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the quantmod library
+library(quantmod)
+
+# Access financial information on Apple stock
+getSymbols("AAPL",src="yahoo", from="2016-05-02", to="2017-10-02") 
+
+
+head(AAPL)
+```
+
+You can also download and store your data in a .csv file.
+
+```{r, message=FALSE, warning=FALSE}
+# Download data
+write.table(AAPL, file = "AAPL.csv", row.names=FALSE, col.names=TRUE, sep=",")
+```
+
+
+### barChart()
+
+To visualize your data, you need to call the function barChart(). It will showcase the price evolution and highlight posiive and negative trading days. Moreover, you will be able to visualize the volume of traded stocks per day.
+
+
+```{r, message=FALSE, warning=FALSE}
+# Visualize in a bar chart, with volume traded
+barChart(AAPL)
+```
+
+You can also download and store your data in a .csv file.
+
+```{r, message=FALSE, warning=FALSE}
+# Download data
+write.table(AAPL, file = "AAPL.csv", row.names=FALSE, col.names=TRUE, sep=",")
+```
+
+### getDividends()
+
+Furthermore, to help you analyse your stock, you can also access the dividend of the company with the function getDividends(). It also takes as an input the ticker of the stock researched. It then requires the user to specify the timeframe of the data.
+
+```{r, message=FALSE, warning=FALSE}
+# Get the dividend data
+getDividends("AAPL",src="yahoo", from="2016-05-02", to="2017-10-02")
+
+```
+<!--
+### getFX()
+
+The getFX() function lets you obtain data regarding the exchange rate of a pair of currencies. Consequently, the function takes as an input a pair of currencies expressed as 'CUR1/CUR2' and a timeframe. For the exchange rate between Canada and the US, we would write the following code:
+
+
+```{r, message=FALSE, warning=FALSE}
+# Get the exchange rate data
+currency <- getFX('CAD/USD')
+
+data('CAD/USA')
+
+```
+-->
+
+## tl;dr
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+#Loading the quantmod library
+library(quantmod)
+
+# Access financial information on Apple stock
+getSymbols("AAPL",src="yahoo", from="2016-05-02", to="2017-10-02") 
+
+
+head(AAPL)
+
+# Visualize in a bar chart, with volume traded
+barChart(AAPL)
+
+# Download data
+write.table(AAPL, file = "AAPL.csv", row.names=FALSE, col.names=TRUE, sep=",")
+
+# Get the dividend data
+getDividends("AAPL",src="yahoo", from="2016-05-02", to="2017-10-02")
+```
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| getSymbols() | stock data
+| barChart() | Financial data visualisation 
+| getDividends() | stock dividend data()
+
+## References
+
+This course uses the [quantmod package documentation](https://cran.r-project.org/web/packages/quantmod/quantmod.pdf)
+
+
+
+
