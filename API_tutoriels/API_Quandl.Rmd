@@ -41,6 +41,13 @@ library(Quandl)
 Quandl.api_key("abcdefghijklmnopqrstuvwxyz123456")
 ```
 
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# Register API key
+library(Quandl)
+Quandl.api_key("dgHj2ix2qxWUKwEgWvR9")
+#Quandl.api_key("dgHj2ix2qxWUKwEgWvR9")
+```
+
 Now, with your API key you can access data sources of Quandl
 
 This library gives access to financial and economic datasets from hundreds of publishers on one convenient platform
@@ -87,7 +94,7 @@ This function is used for datatables (used for non-time-series data) data produc
 For example we would like to retrieve all rows for ZACKS/FC where ticker='AAPL' (Apple).
 
 ```{r, message=FALSE, warning=FALSE}
-mydata = Quandl.datatable("ZACKS/FC", ticker="AAPL")
+mydata = Quandl.datatable("ZACKS/FC", ticker="AAPL") 
 ```
 
 Filters can also be added to target certain data for the datatables data.

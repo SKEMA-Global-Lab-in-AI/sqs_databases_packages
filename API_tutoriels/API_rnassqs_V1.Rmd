@@ -48,7 +48,20 @@ The nassqs_params() return a list of NASS QS parameters. This function could be 
 
 For example, we would like to obtain a list of all the available parameters for a specefic research.
 
-```{r, message=FALSE, warning=FALSE}
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+ library(rnassqs)
+
+# Register API key
+NASSQS_TOKEN="ABCDEFG-HIJK-LMNO-PQRS-TUVWXYZ12345"
+# You must set your api key before requesting data
+nassqs_auth(key = "ABCDEFG-HIJK-LMNO-PQRS-TUVWXYZ12345")
+
+# Available parameters
+nassqs_params()
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 
  library(rnassqs)
 
