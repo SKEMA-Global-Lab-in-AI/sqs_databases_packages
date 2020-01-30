@@ -1,13 +1,10 @@
 ---
 title: "API : WDI"
 
-description: |
-  Access online data through the WDI API.
+description: Access online data through the WDI API.
 authors:
-  - name: Alexandre Lanctôt-Laurin
-          Renaud Gironne 
-          Rémi Rocheleau 
-    url: https://example.com/norajones
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
     affiliation: SKEMA Business School (Raleigh, NC)
     affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
 date: "`r Sys.Date()`"
@@ -15,14 +12,14 @@ output:
   distill::distill_article:
     toc: true
     toc_depth : 4
-#bibliography: virtualCampus.bib
+bibliography: virtualCampus.bib
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-![](./WDI.png)
+
 
 ## Database description 
 
@@ -30,13 +27,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 World bank : https://www.worldbank.org/ 
 
+![](https://www.breakingbelizenews.com/wp-content/uploads/2016/04/world-bank-logo.png)
+
 ## Functions 
 
 This library gives access to all indicators provided by the World Bank. The functions listed below allow you to search and download specific data from the WDI database. 
 
 * **WDIsearch()**
 * **WDI()**
-* **WDIbulk()**  
 
 Each of these functions are detailed in this course and some examples are provided. 
 
@@ -59,9 +57,9 @@ listOfIndicators[1:5,]
 
 ### WDI()
 
-The function WDI() takes as an input the indicator's code and the country of the data wanted. To search specific dates, it is possible to add as inputs the starting year and the ending year of the data. 
+The function WDI() takes as an input the indicator's code and the country of the data wanted. It returns the value of the indicator for the countries selected. To search specific dates, it is possible to add as inputs the starting year and the ending year of the data. 
 
-For example, it would be interested to evaluate the total amount of stocks traded in percentage of GDP (CM.MKT.TRAD.GD.ZS) for 4 countries (France - FR; Canada - CA; USA - US; China - CN) from 2000 to 2014. This could be obtained by using the function WDI() with the following inputs: 
+For example, it would be interesting to evaluate the total amount of stocks traded in percentage of GDP (CM.MKT.TRAD.GD.ZS) for 4 countries (France - FR; Canada - CA; USA - US; China - CN) from 2000 to 2014. This could be obtained by using the function WDI() with the following inputs: 
 
 * __indicator__ = "CM.MKT.TRAD.GD.ZS"
 * __country__ = c("FR", "CA", "US","CN")
@@ -75,13 +73,34 @@ stockTraded <- WDI(indicator = "CM.MKT.TRAD.GD.ZS", country = c("FR", "CA", "US"
 head(stockTraded)
 ```
 
+## tl;dr
 
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+#Loading the WDI library
+library(WDI)
 
-Distill is a publication format for scientific and technical writing, native to the web. 
+# Search all indicators with the term "GDP"
+listOfIndicators <- WDIsearch("GDP")
 
-Learn more about using Distill for R Markdown at <https://rstudio.github.io/distill>. 
+# List the first 5 indicators
+listOfIndicators[1:5,]
 
-##References
+stockTraded <- WDI(indicator = "CM.MKT.TRAD.GD.ZS", country = c("FR", "CA", "US","CN"), start = 2000, end = 2016)
+
+head(stockTraded)
+```
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| WDIsearch() | Search for world bank indicators |
+| WDI() | Find data related to the indicators for each country |
+
+## References
+
+This course uses the [WDI package documentation](https://www.r-project.org/nosvn/pandoc/WDI.html)
+
 
 
 
