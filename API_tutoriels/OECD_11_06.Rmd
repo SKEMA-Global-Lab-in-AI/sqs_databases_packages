@@ -1,0 +1,118 @@
+---
+title: "API : OECD"
+
+description: |
+  Access online data through the OECD API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+#bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Database description 
+
+The Organisation for Economic Co-operation and Development (OECD) is an intergovernmental economic organisation with 36 member countries. It is a forum of countries providing a platform to compare policy experiences, seek answers to common problems, identify good practices and coordinate domestic and international policies of its members.
+
+OECD : https://www.oecd.org/about/
+
+## Functions
+
+* **search_dataset()**
+* **get_data_structure**
+* **get_datasets()**
+
+Each of these functions are detailed in this course and some examples are provided. 
+
+### search_dataset()**
+
+The function search_dataset() searches for OECD indicators. It takes as an input the indicator that would be useful for your analysis. It searches and returns a table of all the available indicator related to the input inserted.
+
+
+```{r}
+# Loading OECD library
+library(OECD)
+
+# List all available datasets
+dataset_list <- get_datasets()
+
+# Search all indicators with the term "unemployment"
+search_dataset("unemployment", data = dataset_list)
+
+```
+
+* **get_data_structure**
+
+The function get_data_structure takes as an input the id associate with the dataset and returns the structure of any query made with the OECD package.
+
+```{r}
+# Structure of a query
+dstruc <- get_data_structure("DUR_D")
+str(dstruc, max.level = 1)
+```
+
+* **get_datasets()**
+
+The function get_datasets takes as an input the dataset id and filters. Add a variable to list all of the specific filters  allows to simplify the input of the function. get_datasets returns a dataframe containing the selected data.
+
+```{r}
+# Filter use to narrow the research (Canada-Germany-France-USA; male and female; 20-24 years old)
+filter_list <- list(c("DEU", "FRA", "CAN", "USA"), "MW", "2024")
+
+# Dataframe containing selected data
+unemployementOECD <- get_dataset(dataset = "DUR_D", filter = filter_list)
+unemployementOECD[1:6,]
+```
+
+## tl;dr
+
+```{r}
+# Loading OECD library
+library(OECD)
+
+# List all available datasets
+dataset_list <- get_datasets()
+
+# Search all indicators with the term "unemployment"
+search_dataset("unemployment", data = dataset_list)
+
+# Structure of a query
+dstruc <- get_data_structure("DUR_D")
+str(dstruc, max.level = 1)
+
+# Filter use to narrow the research (Canada-Germany-France-USA; male and female; 20-24 years old)
+filter_list <- list(c("DEU", "FRA", "CAN", "USA"), "MW", "2024")
+
+# Dataframe containing selected data
+unemployementOECD <- get_dataset(dataset = "DUR_D", filter = filter_list)
+unemployementOECD[1:6,]
+
+
+```
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| search_dataset() | Search for OECD indicators |
+| get_data_structure() | Read the structure of any query made with the OECD package |
+| get_datasets() | Find data related to the indicators |
+
+Distill is a publication format for scientific and technical writing, native to the web. 
+
+Learn more about using Distill for R Markdown at <https://rstudio.github.io/distill>.
+
+
+
+
+

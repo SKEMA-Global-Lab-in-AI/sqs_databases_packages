@@ -1,0 +1,98 @@
+---
+title: "API : GSSR"
+
+description: Access online data through the GSSR API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Database description 
+
+"The GSS gathers data on contemporary American society in order to monitor and explain trends and constants in attitudes, behaviors, and attributes.  Hundreds of trends have been tracked since 1972. In addition, since the GSS adopted questions from earlier surveys, trends can be followed for up to 80 years.
+
+The GSS contains a standard core of demographic, behavioral, and attitudinal questions, plus topics of special interest. Among the topics covered are civil liberties, crime and violence, intergroup tolerance, morality, national spending priorities, psychological well-being, social mobility, and stress and traumatic events." (About de GSS, the General Social Survey)
+
+The General Social Survey : http://gss.norc.org/
+
+
+## Functions 
+
+This library doesn't have specific functions. It loads data than allows you to filter it to your needs. We'll explore how we can use the data imported. Every variable is associated with a survey.
+
+* **Loading the data**
+* **Select the variables and filter them**
+* **Get the properties of the variables**
+
+Each of these steps are detailed in this course and some examples are provided. 
+
+### Loading the data
+
+The data is imported as soon as you use the package. To do so, use the following code.
+
+```{r, message=FALSE, warning=FALSE}
+library(gssr)
+#> Package loaded. To attach the GSS data, type data(gss_all) at the console.
+#> For the codebook, type data(gss_doc). The gss_all and gss_doc objects will then be available to use.
+#data(gss_doc)
+
+data(gss_all)
+
+data(gss_doc)
+
+gss_doc
+
+
+```
+
+
+
+### Select the variables and filter them
+
+When the data is selected, you can then filter the variables to 
+
+
+```{r, message=FALSE, warning=FALSE}
+gss_doc %>% filter(id == "race") %>% 
+  select(id, description, text)
+```
+
+## tl;dr
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+#Loading the WDI library
+library(WDI)
+
+# Search all indicators with the term "GDP"
+listOfIndicators <- WDIsearch("GDP")
+
+# List the first 5 indicators
+listOfIndicators[1:5,]
+
+stockTraded <- WDI(indicator = "CM.MKT.TRAD.GD.ZS", country = c("FR", "CA", "US","CN"), start = 2000, end = 2016)
+
+head(stockTraded)
+```
+
+## References
+
+This course uses the [GSSR package documentation](https://github.com/kjhealy/gssr)
+
+
+
+
+
