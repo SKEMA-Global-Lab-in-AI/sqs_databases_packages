@@ -6,3 +6,7 @@ sqs_Quandl_data <- function(term, start, end) {
 }
 
 sqs_Quandl_data("FRED/GDP", "2001-12-31", "2005-12-31")
+
+sqs_Quandl_datatable <- function(term, ticker) {
+  return (Quandl.datatable(term, ticker))
+}
