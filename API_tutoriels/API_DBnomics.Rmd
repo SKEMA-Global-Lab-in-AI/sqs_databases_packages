@@ -1,0 +1,107 @@
+---
+title: "API : WDI"
+
+description: Access online data through the WDI API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Database description 
+
+"The primary World Bank collection of development indicators, compiled from officially-recognized international sources. It presents the most current and accurate global development data available, and includes national, regional and global estimates" (World Development Indicators, The World Bank) 
+
+World bank : https://www.worldbank.org/ 
+
+![](https://www.breakingbelizenews.com/wp-content/uploads/2016/04/world-bank-logo.png)
+
+## Functions 
+
+This library gives access to all indicators provided by the World Bank. The functions listed below allow you to search and download specific data from the WDI database. 
+
+* **WDIsearch()**
+* **WDI()**
+
+Each of these functions are detailed in this course and some examples are provided. 
+
+### WDIsearch()
+
+The function WDIsearch() takes as an input any string of character and will provide the list of indicators containing this string of character. 
+
+For example, we would like to obtain all indicators using the term “GDP” from the database WDI.
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the WDI library
+library(WDI)
+
+# Search all indicators with the term "GDP"
+listOfIndicators <- WDIsearch("GDP")
+
+# List the first 5 indicators
+listOfIndicators[1:5,]
+```
+
+### WDI()
+
+The function WDI() takes as an input the indicator's code and the country of the data wanted. It returns the value of the indicator for the countries selected. To search specific dates, it is possible to add as inputs the starting year and the ending year of the data. 
+
+For example, it would be interesting to evaluate the total amount of stocks traded in percentage of GDP (CM.MKT.TRAD.GD.ZS) for 4 countries (France - FR; Canada - CA; USA - US; China - CN) from 2000 to 2014. This could be obtained by using the function WDI() with the following inputs: 
+
+* __indicator__ = "CM.MKT.TRAD.GD.ZS"
+* __country__ = c("FR", "CA", "US","CN")
+* __start__ = 2000
+* __end__ = 2014
+
+```{r, message=FALSE, warning=FALSE}
+# Access and store data concerning Stocks traded in total value (% of GDP)
+stockTraded <- WDI(indicator = "CM.MKT.TRAD.GD.ZS", country = c("FR", "CA", "US","CN"), start = 2000, end = 2016)
+
+head(stockTraded)
+```
+
+## tl;dr
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+#Loading the WDI library
+library(WDI)
+
+# Search all indicators with the term "GDP"
+listOfIndicators <- WDIsearch("GDP")
+
+# List the first 5 indicators
+listOfIndicators[1:5,]
+
+stockTraded <- WDI(indicator = "CM.MKT.TRAD.GD.ZS", country = c("FR", "CA", "US","CN"), start = 2000, end = 2016)
+
+head(stockTraded)
+```
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| WDIsearch() | Search for world bank indicators |
+| WDI() | Find data related to the indicators for each country |
+
+## References
+
+This course uses the [WDI package documentation](https://www.r-project.org/nosvn/pandoc/WDI.html)
+
+
+
+
+
