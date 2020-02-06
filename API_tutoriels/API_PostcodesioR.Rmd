@@ -1,0 +1,83 @@
+---
+title: "API : PostcodesioR"
+
+description: Access online data through the PostcodesioR API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Database description 
+
+"In UK, the Postcode system have been adopted for a wide range of purposes in addition to aiding the sorting of the mail: for calculating insurance premiums, designating destinations in route planning software and as the lowest level of aggregation in census enumeration." (Postcode UK, UK Postcodes)
+
+UK Postcodes : https://www.ukpostcodes.net/
+
+
+## Function
+
+This library allows the user to work with UK geospatial data using alphanumeric postcodes. With this package, it is possible to split data on various administrative levels (regions, counties). The postcode_lookup() function is the main tool loaded with this package.
+
+* **postcode_lookup()**
+
+This function is detailed below.
+
+### postcode_lookup()
+
+The function postcode_lookup() takes as an input a UK postcode and returns a dataframe. This dataframe gives information for this postcode provided by Ordnance Survey and Office for National Statistics.
+
+For example, we would like to obtain geospatial data for the Edinburgh Castle (EH2 3HT).
+
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the PostcodesioR library
+library(PostcodesioR)
+
+#Geocoded postcode
+postcode_lookup("EH2 3HT")
+
+```
+
+We now have geospatial data for the Edinburgh Castle!
+
+
+## tl;dr
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+#Loading the PostcodesioR library
+library(PostcodesioR)
+
+#Geocoded postcode
+postcode_lookup("EH2 3HT")
+
+```
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| postcode_lookup() | Geocoded postcode |
+
+
+## References
+
+This course uses the [PostcodesioR package documentation](https://walczak.org/2019/08/postcodesior-0-1-1-is-on-cran/)
+
+
+
+
+
