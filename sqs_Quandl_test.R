@@ -1,6 +1,15 @@
 library(Quandl)
 Quandl.api_key("dgHj2ix2qxWUKwEgWvR9")
 
-sqs_Quandl_
+sqs_Quandl_data <- function(term, start, end) {
+  return(Quandl(term, start_date=start, end_date=end))
+}
 
-Test
+sqs_Quandl_data("FRED/GDP", "2001-12-31", "2005-12-31")
+
+sqs_Quandl_datatable <- function(term, stock) {
+  return (Quandl.datatable(term, ticker = stock))
+}
+
+Quandl.datatable("ZACKS/FC", ticker="AAPL")
+

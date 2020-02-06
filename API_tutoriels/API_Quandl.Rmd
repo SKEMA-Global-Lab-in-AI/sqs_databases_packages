@@ -126,7 +126,7 @@ mydata3 = Quandl.datatable("ZACKS/FC", ticker=c("AAPL", "MSFT"), per_end_date.gt
 | **Command** | **Detail** |
 | ------------------------------ | ----------------------------------  |
 | Quandl() | Find data from datasets in the time series format |
-| Quandl.datatable()() | Find data from datasets in the "datatables" format |
+| Quandl.datatable() | Find data from datasets in the "datatables" format |
 
 ## References
 
