@@ -1,7 +1,7 @@
 ---
-title: "API : WDI"
+title: "API : DBnomics"
 
-description: Access online data through the WDI API.
+description: Access online data through the DBnomics API.
 authors:
   - name: Thierry Warin
     url: https://www.nuance-r.com/principalInvestigator.html
@@ -20,86 +20,163 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-
 ## Database description 
 
-"The primary World Bank collection of development indicators, compiled from officially-recognized international sources. It presents the most current and accurate global development data available, and includes national, regional and global estimates" (World Development Indicators, The World Bank) 
+"This package provides you access to DBnomics data series. DBnomics is an open-source project with the goal of aggregating the world's economic data in one location, free of charge to the public. DBnomics covers hundreds of millions of series from international and national institutions (Eurostat, World Bank, IMF, ...)." (DBnomics)
 
-World bank : https://www.worldbank.org/ 
+DB.Nomics : https://db.nomics.world/
 
-![](https://www.breakingbelizenews.com/wp-content/uploads/2016/04/world-bank-logo.png)
 
 ## Functions 
 
-This library gives access to all indicators provided by the World Bank. The functions listed below allow you to search and download specific data from the WDI database. 
+This library gives access to all indicators provided by the Nomics Database. The functions listed below allow you to search and download specific data from the Nomics database.
 
-* **WDIsearch()**
-* **WDI()**
+* **rdb()**
 
-Each of these functions are detailed in this course and some examples are provided. 
+rdb() can be used to fetch times series by ids, by mask, by dimensions or with a query
 
-### WDIsearch()
 
-The function WDIsearch() takes as an input any string of character and will provide the list of indicators containing this string of character. 
+### Fetch time series by ids:
 
-For example, we would like to obtain all indicators using the term “GDP” from the database WDI.
+The function rdb() can be used to detch time series by ids. 
 
-```{r, message=FALSE, warning=FALSE}
-#Loading the WDI library
-library(WDI)
-
-# Search all indicators with the term "GDP"
-listOfIndicators <- WDIsearch("GDP")
-
-# List the first 5 indicators
-listOfIndicators[1:5,]
-```
-
-### WDI()
-
-The function WDI() takes as an input the indicator's code and the country of the data wanted. It returns the value of the indicator for the countries selected. To search specific dates, it is possible to add as inputs the starting year and the ending year of the data. 
-
-For example, it would be interesting to evaluate the total amount of stocks traded in percentage of GDP (CM.MKT.TRAD.GD.ZS) for 4 countries (France - FR; Canada - CA; USA - US; China - CN) from 2000 to 2014. This could be obtained by using the function WDI() with the following inputs: 
-
-* __indicator__ = "CM.MKT.TRAD.GD.ZS"
-* __country__ = c("FR", "CA", "US","CN")
-* __start__ = 2000
-* __end__ = 2014
+Here are some examples of how it can be used:
 
 ```{r, message=FALSE, warning=FALSE}
-# Access and store data concerning Stocks traded in total value (% of GDP)
-stockTraded <- WDI(indicator = "CM.MKT.TRAD.GD.ZS", country = c("FR", "CA", "US","CN"), start = 2000, end = 2016)
+#Loading the DBnomics library
+library(rdbnomics)
 
-head(stockTraded)
+# Fetch one series from dataset 'Unemployment rate' (ZUTN) of AMECO provider
+df1 <- rdb(ids = "AMECO/ZUTN/EA19.1.0.0.0.ZUTN")
+
+# Fetch two series from dataset 'Unemployment rate' (ZUTN) of AMECO provider:
+df2 <- rdb(ids = c("AMECO/ZUTN/EA19.1.0.0.0.ZUTN", "AMECO/ZUTN/DNK.1.0.0.0.ZUTN"))
+
+# Fetch two series from different datasets of different providers:
+df3 <- rdb(ids = c("AMECO/ZUTN/EA19.1.0.0.0.ZUTN", "IMF/BOP/A.FR.BCA_BP6_EUR"))
+
+# Results
+df1
+df2
+df3
 ```
+
+
+### Fetch time series by mask:
+
+The function rdb() can be used to detch time series by mask. 
+
+Here are some examples of how it can be used:
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the DBnomics library
+library(rdbnomics)
+
+# Fetch one series from dataset 'Balance of Payments' (BOP) of IMF:
+df1 <- rdb("IMF", "BOP", mask = "A.FR.BCA_BP6_EUR")
+
+# Fetch two series from dataset 'Balance of Payments' (BOP) of IMF:
+df2 <- rdb("IMF", "BOP", mask = "A.FR+ES.BCA_BP6_EUR")
+
+# Fetch all series along one dimension from dataset 'Balance of Payments' (BOP) of IMF:
+df3 <- rdb("IMF", "BOP", mask = "A..BCA_BP6_EUR")
+
+# Fetch series along multiple dimensions from dataset 'Balance of Payments' (BOP) of IMF:
+df4 <- rdb("IMF", "BOP", mask = "A.FR.BCA_BP6_EUR+IA_BP6_EUR")
+
+# Results
+df1
+df2
+df3
+df4
+```
+
+
+## Fetch time series by dimensions:
+
+The function rdb() can be used to detch time series by dimensions. 
+
+Here are some examples of how it can be used:
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the DBnomics library
+library(rdbnomics)
+
+# Fetch one value of one dimension from dataset 'Unemployment rate' (ZUTN) of AMECO provider:
+df1 <- rdb("AMECO", "ZUTN", dimensions = list(geo = "ea12"))
+# or
+df1 <- rdb("AMECO", "ZUTN", dimensions = '{"geo": ["ea12"]}')
+
+# Fetch two values of one dimension from dataset 'Unemployment rate' (ZUTN) of AMECO provider:
+df2 <- rdb("AMECO", "ZUTN", dimensions = list(geo = c("ea12", "dnk")))
+# or
+df2 <- rdb("AMECO", "ZUTN", dimensions = '{"geo": ["ea12", "dnk"]}')
+
+# Fetch several values of several dimensions from dataset 'Doing business' (DB) of World Bank:
+df3 <- rdb("WB", "DB", dimensions = list(country = c("DZ", "PE"), indicator = c("ENF.CONT.COEN.COST.ZS", "IC.REG.COST.PC.FE.ZS")))
+# or
+df3 <- rdb("WB", "DB", dimensions = '{"country": ["DZ", "PE"], "indicator": ["ENF.CONT.COEN.COST.ZS", "IC.REG.COST.PC.FE.ZS"]}')
+
+# Results
+df1
+df2
+df3
+```
+
+
+### Fetch time series with a query
+
+The function rdb() can be used to detch time series with a query.
+
+Here are some examples of how it can be used:
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the DBnomics library
+library(rdbnomics)
+
+# Fetch one series from dataset 'WEO by countries' (WEO) of IMF provider:
+df1 <- rdb("IMF", "WEO", query = "France current account balance percent")
+
+# Fetch series from dataset 'WEO by countries' (WEO) of IMF provider:
+df2 <- rdb("IMF", "WEO", query = "current account balance percent")
+
+# Results
+df1
+df2
+```
+
 
 ## tl;dr
 
 ```{r, eval=FALSE, message=FALSE, warning=FALSE}
-#Loading the WDI library
-library(WDI)
+#Loading the DBnomics library
+library(rdbnomics)
 
-# Search all indicators with the term "GDP"
-listOfIndicators <- WDIsearch("GDP")
+# Fetch one series from dataset 'xxx' (XXX) of YYY provider
+df1 <- rdb(ids = "YYY/XXX/EA19.1.0.0.0.XXX")
 
-# List the first 5 indicators
-listOfIndicators[1:5,]
+# Fetch one series from dataset 'xxx' (XXX) of YYY:
+df1 <- rdb("YYY", "XXX", mask = "A.FR.BCA_BP6_EUR")
 
-stockTraded <- WDI(indicator = "CM.MKT.TRAD.GD.ZS", country = c("FR", "CA", "US","CN"), start = 2000, end = 2016)
+# Fetch one value of one dimension from dataset 'xxx' (XXX) of YYY provider:
+df1 <- rdb("YYY", "XXX", dimensions = list(geo = "ea12"))
 
-head(stockTraded)
+# Fetch one series from dataset 'xxx' (XXX) of YYY provider:
+df1 <- rdb("YYY", "XXX", query = "France current account balance percent")
+
 ```
+
 
 ## Code learned this week
 
 | **Command** | **Detail** |
 | ------------------------------ | ----------------------------------  |
-| WDIsearch() | Search for world bank indicators |
-| WDI() | Find data related to the indicators for each country |
+| rdb() | Search for DBnomics series |
+
 
 ## References
 
-This course uses the [WDI package documentation](https://www.r-project.org/nosvn/pandoc/WDI.html)
+This course uses the [Access DBnomics data series from R readme](https://git.nomics.world/dbnomics/rdbnomics?fbclid=IwAR0Y9QHhNLsxsVumQ0MfnmcK5d9Ld1_qZRc3rrlUu9AxYAoQ5XKg4fawsKY)
 
 
 
