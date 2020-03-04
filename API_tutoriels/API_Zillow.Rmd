@@ -1,0 +1,142 @@
+---
+title: "API : Zillow"
+
+description: Access online data through the Zillow API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Database description
+
+"The new Zillow API Network turns member sites into mini real estate portals by offering fresh and provocative real estate content to keep people coming back." 
+
+Zillow : https://www.zillow.com/
+
+## Functions 
+
+This library gives access to all indicators provided by the Zillow databse. The functions listed below allow you to search and download specific data from the database.
+
+* **GetChart()**
+* **GetComps()**
+* **GetMonthlyPayments()**
+* **GetSearchResults()**
+
+Each of these functions are detailed in this course and some examples are provided. 
+
+### GetChart()
+
+The GetChart API generates a URL for an image file that displays historical Zestimates for a specific property. The API accepts as input the Zillow Property ID as well as a chart type: either percentage or dollar value change. Optionally, the API accepts width and height parameters that constrain the size of the image. The historical data can be for the past 1 year, 5 years or 10 years.
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the ZillowR library
+library(ZillowR)
+set_zillow_web_service_id('YOUR ZWS-ID')
+
+# Search the chart
+Zchart <- GetChart(zpid = NULL, unit_type = c("percent", "dollar"), width = NULL, height = NULL, chartDuration = c("1year", "5years", "10years"), zws_id = getOption("ZillowR-zws_id"), url = "http://www.zillow.com/webservice/GetChart.htm")
+
+# Show the chart
+Zchart
+```
+
+### GetComps()
+
+The GetComps API returns a list of comparable recent sales for a specified property. The result set returned contains the address, Zillow property identifier, and Zestimate for the comparable properties and the principal property for which the comparables are being retrieved.
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the ZillowR library
+library(ZillowR)
+set_zillow_web_service_id('YOUR ZWS-ID')
+
+# Search the comps
+Zcomps <- GetComps(zpid = NULL, count = NULL, rentzestimate = FALSE, zws_id = getOption("ZillowR-zws_id"), url = "http://www.zillow.com/webservice/GetComps.htm")
+
+# Show the comps
+Zcomps
+```
+
+### GetMonthlyPayments()
+
+For a specific loan amount, the GetMonthlyPayments API returns the estimated monthly payment that includes principal and interest based on today’s mortgage rate. The API returns the estimated monthly payment per loan type (30-year fixed, 15-year fixed, and 5/1 ARM). If a ZIP code is entered, the estimated taxes and insurance are returned in the result set.
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the ZillowR library
+library(ZillowR)
+set_zillow_web_service_id('YOUR ZWS-ID')
+
+# Search the monthly payments data
+ZMonthlyPayments <- GetMonthlyPayments(price = NULL, down = NULL, dollarsdown = NULL, zip = NULL, zws_id = getOption("ZillowR-zws_id"), url = "http://www.zillow.com/webservice/GetMonthlyPayments.htm")
+
+# Show the monthly payments data
+ZMonthlyPayments
+```
+
+### GetSearchResults()
+
+The GetSearchResults API finds a property for a specified address. The content returned contains the address for the property or properties as well as the Zillow Property ID (ZPID) and current Zestimate. It also includes the date the Zestimate was computed, a valuation range and the Zestimate ranking for the property within its ZIP code
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the ZillowR library
+library(ZillowR)
+set_zillow_web_service_id('YOUR ZWS-ID')
+
+# Search the property
+Zproperty <- GetSearchResults(address = NULL, citystatezip = NULL, rentzestimate = FALSE, zws_id = getOption("ZillowR-zws_id"), url = "http://www.zillow.com/webservice/GetSearchResults.htm")
+
+# Show the property
+Zproperty
+```
+
+## tl;dr
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the ZillowR library
+library(ZillowR)
+set_zillow_web_service_id('YOUR ZWS-ID')
+
+# Search the chart, the comps, the monthly payments data and the property
+Zchart <- GetChart(zpid = NULL, unit_type = c("percent", "dollar"), width = NULL, height = NULL, chartDuration = c("1year", "5years", "10years"), zws_id = getOption("ZillowR-zws_id"), url = "http://www.zillow.com/webservice/GetChart.htm")
+
+Zcomps <- GetComps(zpid = NULL, count = NULL, rentzestimate = FALSE, zws_id = getOption("ZillowR-zws_id"), url = "http://www.zillow.com/webservice/GetComps.htm")
+
+ZMonthlyPayments <- GetMonthlyPayments(price = NULL, down = NULL, dollarsdown = NULL, zip = NULL, zws_id = getOption("ZillowR-zws_id"), url = "http://www.zillow.com/webservice/GetMonthlyPayments.htm")
+
+Zproperty <- GetSearchResults(address = NULL, citystatezip = NULL, rentzestimate = FALSE, zws_id = getOption("ZillowR-zws_id"), url = "http://www.zillow.com/webservice/GetSearchResults.htm")
+
+# Show the chart, the comps, the monthly payments data and the property
+Zchart
+Zcomps
+ZMonthlyPayments
+Zproperty
+```
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| GetChart() | Generates a URL for an image file that displays historical Zestimates for a specific property |
+| GetComps() | Returns a list of comparable recent sales for a specified property |
+| GetMonthlyPayments() | Return the estimated monthly payment based on today’s mortgage rate |
+| GetSearchResults() |  Find a property for a specified address |
+
+## References
+
+This course uses the [ZillowR package documentation](https://cran.r-project.org/web/packages/ZillowR/ZillowR.pdf?fbclid=IwAR2FQhd26MnI2mikYLRVyh7h6_62-0a1JQh5tnbhHBQaoTp-mXYb_9DHmWw) and the [ZillowR general documentation](https://cran.r-project.org/web/packages/ZillowR/README.html?fbclid=IwAR1PPTn5lfi-JIUYl-1VTElohYC5z1PRHLXG-GgQkvS9xq_nUMzy3NVZjHo)
+
+
+
+
+

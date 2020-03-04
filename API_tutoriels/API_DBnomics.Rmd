@@ -1,0 +1,184 @@
+---
+title: "API : DBnomics"
+
+description: Access online data through the DBnomics API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Database description 
+
+"This package provides you access to DBnomics data series. DBnomics is an open-source project with the goal of aggregating the world's economic data in one location, free of charge to the public. DBnomics covers hundreds of millions of series from international and national institutions (Eurostat, World Bank, IMF, ...)." (DBnomics)
+
+DB.Nomics : https://db.nomics.world/
+
+
+## Functions 
+
+This library gives access to all indicators provided by the Nomics Database. The functions listed below allow you to search and download specific data from the Nomics database.
+
+* **rdb()**
+
+rdb() can be used to fetch times series by ids, by mask, by dimensions or with a query
+
+
+### Fetch time series by ids:
+
+The function rdb() can be used to detch time series by ids. 
+
+Here are some examples of how it can be used:
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the DBnomics library
+library(rdbnomics)
+
+# Fetch one series from dataset 'Unemployment rate' (ZUTN) of AMECO provider
+df1 <- rdb(ids = "AMECO/ZUTN/EA19.1.0.0.0.ZUTN")
+
+# Fetch two series from dataset 'Unemployment rate' (ZUTN) of AMECO provider:
+df2 <- rdb(ids = c("AMECO/ZUTN/EA19.1.0.0.0.ZUTN", "AMECO/ZUTN/DNK.1.0.0.0.ZUTN"))
+
+# Fetch two series from different datasets of different providers:
+df3 <- rdb(ids = c("AMECO/ZUTN/EA19.1.0.0.0.ZUTN", "IMF/BOP/A.FR.BCA_BP6_EUR"))
+
+# Results
+df1
+df2
+df3
+```
+
+
+### Fetch time series by mask:
+
+The function rdb() can be used to detch time series by mask. 
+
+Here are some examples of how it can be used:
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the DBnomics library
+library(rdbnomics)
+
+# Fetch one series from dataset 'Balance of Payments' (BOP) of IMF:
+df1 <- rdb("IMF", "BOP", mask = "A.FR.BCA_BP6_EUR")
+
+# Fetch two series from dataset 'Balance of Payments' (BOP) of IMF:
+df2 <- rdb("IMF", "BOP", mask = "A.FR+ES.BCA_BP6_EUR")
+
+# Fetch all series along one dimension from dataset 'Balance of Payments' (BOP) of IMF:
+df3 <- rdb("IMF", "BOP", mask = "A..BCA_BP6_EUR")
+
+# Fetch series along multiple dimensions from dataset 'Balance of Payments' (BOP) of IMF:
+df4 <- rdb("IMF", "BOP", mask = "A.FR.BCA_BP6_EUR+IA_BP6_EUR")
+
+# Results
+df1
+df2
+df3
+df4
+```
+
+
+## Fetch time series by dimensions:
+
+The function rdb() can be used to detch time series by dimensions. 
+
+Here are some examples of how it can be used:
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the DBnomics library
+library(rdbnomics)
+
+# Fetch one value of one dimension from dataset 'Unemployment rate' (ZUTN) of AMECO provider:
+df1 <- rdb("AMECO", "ZUTN", dimensions = list(geo = "ea12"))
+# or
+df1 <- rdb("AMECO", "ZUTN", dimensions = '{"geo": ["ea12"]}')
+
+# Fetch two values of one dimension from dataset 'Unemployment rate' (ZUTN) of AMECO provider:
+df2 <- rdb("AMECO", "ZUTN", dimensions = list(geo = c("ea12", "dnk")))
+# or
+df2 <- rdb("AMECO", "ZUTN", dimensions = '{"geo": ["ea12", "dnk"]}')
+
+# Fetch several values of several dimensions from dataset 'Doing business' (DB) of World Bank:
+df3 <- rdb("WB", "DB", dimensions = list(country = c("DZ", "PE"), indicator = c("ENF.CONT.COEN.COST.ZS", "IC.REG.COST.PC.FE.ZS")))
+# or
+df3 <- rdb("WB", "DB", dimensions = '{"country": ["DZ", "PE"], "indicator": ["ENF.CONT.COEN.COST.ZS", "IC.REG.COST.PC.FE.ZS"]}')
+
+# Results
+df1
+df2
+df3
+```
+
+
+### Fetch time series with a query
+
+The function rdb() can be used to detch time series with a query.
+
+Here are some examples of how it can be used:
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the DBnomics library
+library(rdbnomics)
+
+# Fetch one series from dataset 'WEO by countries' (WEO) of IMF provider:
+df1 <- rdb("IMF", "WEO", query = "France current account balance percent")
+
+# Fetch series from dataset 'WEO by countries' (WEO) of IMF provider:
+df2 <- rdb("IMF", "WEO", query = "current account balance percent")
+
+# Results
+df1
+df2
+```
+
+
+## tl;dr
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+#Loading the DBnomics library
+library(rdbnomics)
+
+# Fetch one series from dataset 'xxx' (XXX) of YYY provider
+df1 <- rdb(ids = "YYY/XXX/EA19.1.0.0.0.XXX")
+
+# Fetch one series from dataset 'xxx' (XXX) of YYY:
+df1 <- rdb("YYY", "XXX", mask = "A.FR.BCA_BP6_EUR")
+
+# Fetch one value of one dimension from dataset 'xxx' (XXX) of YYY provider:
+df1 <- rdb("YYY", "XXX", dimensions = list(geo = "ea12"))
+
+# Fetch one series from dataset 'xxx' (XXX) of YYY provider:
+df1 <- rdb("YYY", "XXX", query = "France current account balance percent")
+
+```
+
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| rdb() | Search for DBnomics series |
+
+
+## References
+
+This course uses the [Access DBnomics data series from R readme](https://git.nomics.world/dbnomics/rdbnomics?fbclid=IwAR0Y9QHhNLsxsVumQ0MfnmcK5d9Ld1_qZRc3rrlUu9AxYAoQ5XKg4fawsKY)
+
+
+
+
+

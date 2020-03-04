@@ -1,0 +1,96 @@
+---
+title: "API : statCanR"
+
+description: Access online data through the statCanR API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Database description 
+
+"Statistics Canada is the national statistical office. The agency ensures Canadians have the key information on Canada's economy, society and environment that they require to function effectively as citizens and decision makers." (About Us, Statistics Canada) 
+
+Statistic Canada : https://www.statcan.gc.ca/eng/start
+
+
+## Functions 
+
+StatcanR provides the R user with a consistent process to collect data from Statistics Canada’s data portal. It provides access to all Statistics Canada’ open economic data (formerly known as CANSIM tables) now identified by product IDs (PID) by the new Statistics Canada’s Web Data Service.
+
+This tutorial presents how to use the statcanR R package and its function sqs_statcan_data(). The use of this package is separated into two parts. You first have to search the desired table, and then you are able to fetch the data from the sqs_statcan_data() function.
+
+
+* **Search for data** 
+* **sqs_statcan_data()**
+
+
+Some examples are provided below.
+
+### Search for data
+
+In order to search for the desired information, Statistic Canada provides a search engine which indicates us the table number we are looking for. If we were interested in the federal expenditures on science and technology by socio-economic objectives, we would visit https://www150.statcan.gc.ca/n1/en/type/data?MM=1 and type in the search box the data's description.
+
+![](./skema1.png)
+
+For this example the table number is '27-10-0014-01'. With the table number associated with our search, we can move on to extracting data with the API.
+
+### sqs_statcan_data()
+
+The sqs_statcan_data() function takes as an input the table number obtained earlier and the data's display language (french or english). The lang argument is either “fra” or “eng”.
+
+For example, we can now extract the data associated with the federal expenditures on science and technology by socio-economic objectives.
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the statCanR library
+library(statcanR)
+
+# Get data with sqs_statcan_data function
+mydata <- sqs_statcan_data("27-10-0014-01", "eng")
+
+# List the first 5 social-economic objectives
+mydata[1:5, 6:13]
+```
+
+
+## tl;dr
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+#Loading the statCanR library
+library(statcanR)
+
+# Get data with sqs_statcan_data function
+mydata <- sqs_statcan_data("27-10-0014-01", "eng")
+
+# List the first 5 social-economic objectives
+mydata[1:5, 6:13]
+```
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| sqs_statcan_data() | Extract data from Statistic Canada
+
+## References
+
+This course uses the [statCanR package documentation](https://cran.r-project.org/web/packages/statcanR/vignettes/statCanR.html)
+
+
+
+
+

@@ -1,0 +1,159 @@
+---
+title: "API : spiR"
+
+description: Access online data through the spiR API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Database description 
+
+“The Social Progress Index is a new way to define the success of our societies. It is a comprehensive measure of real quality of life, independent of economic indicators. The Social Progress Index is designed to complement, rather than replace, economic measures such as GDP.” (The Social Progress Imperative, 2018)
+
+Social Progress : https://www.socialprogress.org/
+
+
+## Functions 
+
+This package lets you recreate impactful dashboards and visualizations as the ones found on the Social Progress Imperative. This API provides one main function, sqs_spi_data(), which lets you extract the data in a convenient format and two other functions, sqs_spi_country() and sqs_spi_indicator(), that can assist you finding the appropriate arguments for the API.
+
+* **sqs_spi_data()**
+* **sqs_spi_country()**
+* **sqs_spi_indicator()**
+
+Some examples are provided below. 
+
+
+### sqs_spi_data()
+
+First, the function sqs_spi_data() takes as an input the countries we're interested in. We specify this argument with the countries ISO code, as such: c("USA", "FRA", "BRA", "CHN", "ZAF", "CAN"). The second argument is dedicated for the years for which we want data. Finally, we need to specify the indicator from Social Progress we would like to extract.
+
+For example, let's take a look at the SPI indicator (Social Progress Index) for the countries listed above.
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the required library
+library(spiR)
+library(kableExtra)
+library(ggplot2)
+library(dplyr)
+
+#Extracting the data
+myData <- sqs_spi_data(country = c("USA", "FRA", "BRA", "CHN", "ZAF", "CAN"), 
+                       year = c("2014","2015","2016", "2017", "2018", "2019"), 
+                       indicators = "SPI")
+
+#Manipulating the data
+myData$value <- as.numeric(myData$value)
+
+kable(myData)%>%
+scroll_box(width = "100%", height = "200px")
+
+#Plot the data using ggplot
+ggplot(data = myData, aes(x = var_year, y = value, color = countryName)) + 
+  geom_line() +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Social Progress Index of different countries since 2014",
+       x = "Years",
+       y = "Social Progress Index Score",
+       colour = "Countries",
+       caption = "Source: SKEMA Quantum Studio")
+```
+
+We can now compare these countries performances based on the SPI indicator.
+
+### sqs_spi_country()
+
+This function allows you to find and search the right country code associated with the Social
+Progress Index’s Data. If no argument is filed, all indicators will be displayed.
+
+
+```{r, message=FALSE, warning=FALSE}
+#Get the ISO code for a specific country
+mycountry <- sqs_spi_country("Canada")
+mycountry
+```
+
+### sqs_spi_indicator()
+
+This function allows you to find and search the right indicator code from the Social Progress Index
+you want to use. If no argument is filed, all indicators will be displayed.
+
+```{r, message=FALSE, warning=FALSE}
+#Search for an indicator
+myIndicator <- sqs_spi_indicator("mortality")
+myIndicator
+
+```
+
+## tl;dr
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+#Loading the required library
+library(spiR)
+library(kableExtra)
+library(ggplot2)
+library(dplyr)
+
+#Extracting the data
+myData <- sqs_spi_data(country = c("USA", "FRA", "BRA", "CHN", "ZAF", "CAN"), 
+                       year = c("2014","2015","2016", "2017", "2018", "2019"), 
+                       indicators = "SPI")
+
+#Manipulating the data
+myData$value <- as.numeric(myData$value)
+
+kable(myData)%>%
+scroll_box(width = "100%", height = "200px")
+
+#Plot the data using ggplot
+ggplot(data = myData, aes(x = var_year, y = value, color = countryName)) + 
+  geom_line() +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  labs(title = "Social Progress Index of different countries since 2014",
+       x = "Years",
+       y = "Social Progress Index Score",
+       colour = "Countries",
+       caption = "Source: SKEMA Quantum Studio")
+
+#Get the ISO code for a specific country
+mycountry <- sqs_spi_country("Canada")
+mycountry
+
+#Search for an indicator
+myIndicator <- sqs_spi_indicator("mortality")
+myIndicator
+```
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| sqs_spi_data() | Find data related to the indicators for each country |
+| sqs_spi_country() | Search for a country's ISO code |
+| sqs_spi_indicator() | Search for a Social Progress indicator |
+
+## References
+
+This course uses the [spiR package documentation](https://cran.r-project.org/web/packages/spiR/index.html)
+
+
+
+
+

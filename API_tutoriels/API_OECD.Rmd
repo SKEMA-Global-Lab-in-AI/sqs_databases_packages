@@ -1,7 +1,7 @@
 ---
-title: "API : rnassqs"
+title: "API : Expersso"
 
-description: Access online data through the rnassqs API.
+description: Access online data through the Expersso API.
 authors:
   - name: Thierry Warin
     url: https://www.nuance-r.com/principalInvestigator.html
@@ -23,20 +23,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Database description 
 
-"The United States Deparment of Agriculture National Agricultural Statistics Service (USDA-NASS) provides a wide range of agricultural data that includes animal, crop, demographic, economic, and environmental measures across a number of geographies and time periods." (accessing USDA agricultural data via API,   Nicholas Potter) 
+"The primary World Bank collection of development indicators, compiled from officially-recognized international sources. It presents the most current and accurate global development data available, and includes national, regional and global estimates" (World Development Indicators, The World Bank) 
 
-United States Department of Agriculture : https://www.nass.usda.gov/
+World bank : https://www.worldbank.org/ 
 
-
-## API key
-
-To access the API's functions, a key is necessary. To do so, request a key at this link: https://quickstats.nass.usda.gov/api
+![](https://www.breakingbelizenews.com/wp-content/uploads/2016/04/world-bank-logo.png)
 
 ## Functions 
 
-This API lets you download data from the Quick Stats database. The database is maintained by the United States Department of Agriculture. The API allows you to search and analyse data based on certain parameters.
+This library gives access to all indicators provided by the World Bank. The functions listed below allow you to search and download specific data from the WDI database. 
 
-To access the data base
+* **WDIsearch()**
+* **WDI()**
 
 Each of these functions are detailed in this course and some examples are provided. 
 
