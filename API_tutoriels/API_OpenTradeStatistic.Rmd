@@ -1,0 +1,160 @@
+---
+title: "API : Open Trade Statistic" 
+
+description: Access tiny trade data online through the Open Trade Statistics API.
+authors:
+  - name: Thierry Warin
+    url: https://www.nuance-r.com/principalInvestigator.html 
+    affiliation: SKEMA Business School (Raleigh, NC)
+    affiliation_url: https://www.skema-bs.fr/campus/campus-raleigh 
+date: "`r Sys.Date()`"
+output: 
+  distill::distill_article:
+    toc: true
+    toc_depth : 4
+bibliography: virtualCampus.bib
+---
+
+```{r setup, include=FALSE}
+devtools::install_github("opensdmx/rsdmx")
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+## Database description 
+
+Open Trade Statistics is an R package designed to access international economic data. The open database provides data from 1962 to the most recent year available, covering all countries that are part of the United Nations. It is a useful package that can give an access to the data on economic exchanges of UN countries based on their product codes, the years and can also consider the inflation.
+
+Open Trade Statistics: https://ropensci.org/blog/2019/05/09/tradestatistics/ 
+
+## Functions 
+
+Some functions are embedded in this library to obtain international economic data: 
+
+* **ots_create_tidy_data()**: Bilateral and product detailed data
+* **ots_country_code()**: UN country's ISO-3 code
+* **ots_product_code()**: UN commercial product's code
+* **ots_tables**: Available tables in the API
+* **ots_inflation_adjustment()**: Express tidy data in dollars of a reference year, using the inflation 
+
+Each of these functions are detailed in this course and some examples are provided. 
+
+### ots_create_tidy_data()
+The function ots_create_tidy_data() downloads data from different APIs using filter arguments and returns tidy data.
+
+```{r, message=FALSE, warning=FALSE}
+#Loading the Open Trade Statistics library
+library(tradestatistics) 
+
+# Obtain data from 1962, from all reporters countries to all partners countries, for all products, from the yrpc table 
+ots_create_tidy_data(years = 1962, reporters = "all", partners = "all", products = "all", table = "yrpc")
+```
+
+The following functions are used to generate the arguments given in the ots_create_tidy_data() function above. 
+
+### ots_country_code()
+The function ots_country_code() takes as an input the country name and returns the ISO-3 code from the UN official sources of the given country. 
+
+For example, we would like to know the ISO-3 code of Canada, to use it in the ots_create_tidy_data() function. 
+
+```{r, message=FALSE, warning=FALSE}
+
+# Obtain the country's ISO-3 code for Canada 
+ots_country_code("Canada")
+```
+
+Once we get the ISO-3 code, we can use it as the argument "reporters" in the  ots_create_tidy_data() function as the reporter country. 
+
+```{r, message=FALSE, warning=FALSE}
+
+# Obtain data from 1962, from the Canadian reporter country to all countries, for all products, from the yrpc table
+ots_create_tidy_data(years = 1962, reporters = "can", partners = "all", products = "all", table = "yrpc")
+```
+
+We can also use the ISO-3 code as the argument "partners" in the  ots_create_tidy_data() function as the partner country.
+
+```{r, message=FALSE, warning=FALSE}
+
+# Obtain the country's ISO-3 code for the United States of America 
+ots_country_code("America") 
+# Obtain data from 1962, from the Canadian reporter country to the USA partner country, for all products, from the yrpc table 
+ots_create_tidy_data(years = 1962, reporters = "can", partners = "usa", products = "all", table = "yrpc") 
+```
+
+### ots_product_code()
+The function ots_product_code() takes as an input the product name and returns the given product's code according to the UN nomenclature. 
+
+For example, we would like to know the UN code for wine, to use it in the ots_create_tidy_data() function. 
+
+```{r, message=FALSE, warning=FALSE}
+
+# Obtain a single product's commercial code
+ots_product_code("wine") 
+```
+
+Once we get the product code, we can use it as the argument "products" in the  ots_create_tidy_data() function as the exchanged product between countries. 
+
+```{r, message=FALSE, warning=FALSE}
+
+# Obtain data from 1962, from the Canadian reporter country to the USA partner country, for wine, from the yrpc table 
+ots_create_tidy_data(years = 1962, reporters = "can", partners = "usa", products = "wine", table = "yrpc") 
+```
+
+### ots_tables 
+The OTS package is using data from some already existing API, so it can be useful to know which tables can be accessed. The function ots_tables gives the available tables in the API, with both description and source and is used to validate user parameters. 
+
+For example, we would like to know which table we want the data from, to use it in the ots_create_tidy_data() function.
+
+```{r, message=FALSE, warning=FALSE}
+
+# Access various data from different sources. For example, you can use the table yrpc. The default set table is yrpc (Year - Reporter - Partner - Product code), but different tables can be used. 
+ots_tables
+```
+
+### ots_inflation_adjustment()
+The ots_inflation_adjustment() uses inflation records from The World Bank to convert trade records and express them in dollars of the same year.
+
+For example, we would like to convert dollars of 1950 to dollars of 2000, for the exchanges between Canada and USA, for all products, using the yrpc table. 
+
+```{r, message=FALSE, warning=FALSE}
+
+# Convert dollars of 1950 to 2000 using different arguments 
+d <- ots_create_tidy_data(years = 1950, reporters = "can", partners = "usa", products = "all", table = "yrpc") 
+    ots_inflation_adjustment(trade_data = d, reference_year = 2000) 
+```
+
+
+## tl;dr
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+#Loading the Open Trade Statistics library
+library(tradestatistics) 
+
+# Obtain data from 1962, from the Canadian reporter country to the USA partner country, for wine, from the yrpc table 
+ots_create_tidy_data(years = 1962, reporters = "can", partners = "usa", products = "wine", table = "yrpc") 
+
+
+# Convert dollars of 1950 to 2000 using different arguments 
+d <- ots_create_tidy_data(years = 1962, reporters = "can", partners = "usa", products = "wine", table = "yrpc") 
+    ots_inflation_adjustment(trade_data = d, reference_year = 2000)
+```
+
+## Code learned this week
+
+| **Command** | **Detail** |
+| ------------------------------ | ----------------------------------  |
+| ots_create_tidy_data() | Bilateral and product detailed data
+| ots_country_code() | UN country's ISO-3 code 
+| ots_product_code() | UN commercial product's code
+| ots_tables | Available tables in the API
+| ots_inflation_adjustment() | Express tidy data in dollars of a reference year, using the inflation 
+
+## References
+
+This course uses the [Open Trade Statistics package documentation](https://cran.r-project.org/web/packages/tradestatistics/tradestatistics.pdf) 
+and the ["How to use this package" documentation](https://cran.r-project.org/web/packages/tradestatistics/vignettes/basic-usage.html)
